@@ -9,7 +9,7 @@ auth_bp = Blueprint("auth", __name__)
 
 
 @auth_bp.route("/register", methods=["POST"])
-def get_users():
+def register():
     try:
         email = request.json.get("email")
         password = request.json.get("password")
