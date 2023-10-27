@@ -35,7 +35,6 @@ def get_engine_url():
 
 # add your model's MetaData object here
 # for 'autogenerate' support
-from app.models import *
 
 target_metadata = db.Model.metadata
 config.set_main_option("sqlalchemy.url", get_engine_url())
