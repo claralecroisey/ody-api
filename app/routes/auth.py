@@ -39,6 +39,10 @@ def sign_in():
 
     if user is not None and check_password_hash(user.password_hash, password):
         access_token = create_access_token(identity=email)
-        return jsonify(message="Login successful", access_token=access_token, expires_in=os.environ.get("TOKEN_EXPIRATION_TIME"))
+        return jsonify(
+            message="Login successful",
+            access_token=access_token,
+            expires_in=os.environ.get("TOKEN_EXPIRATION_TIME"),
+        )
     else:
         return jsonify(message="Login failed"), 401

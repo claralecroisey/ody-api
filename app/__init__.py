@@ -22,7 +22,7 @@ def create_app():
     CORS(_app, origins=[os.environ.get("CLIENT_URL")])
     _app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL")
     _app.config["JWT_SECRET_KEY"] = os.environ.get("JWT_SECRET_KEY")
-    _app.config['CORS_HEADERS'] = 'Content-Type'
+    _app.config["CORS_HEADERS"] = "Content-Type"
 
     register_extensions(_app)
     register_routes(_app)
