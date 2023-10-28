@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, app, jsonify, request
 from flask_jwt_extended import create_access_token
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -8,8 +8,8 @@ from app.models.user import User
 auth_bp = Blueprint("auth", __name__)
 
 
-@auth_bp.route("/register", methods=["POST"])
-def register():
+@auth_bp.route("/sign-up", methods=["POST"])
+def sign_up():
     try:
         email = request.json.get("email")
         password = request.json.get("password")
@@ -17,7 +17,7 @@ def register():
         user = User.query.filter_by(email=email).one_or_none()
 
         if user is not None:
-            return jsonify(message="username already exists"), 409
+            return jsonify(message="Registration failed"), 401
 
         hashed_password = generate_password_hash(password)
         user = User(email=email, password_hash=hashed_password)
@@ -25,7 +25,7 @@ def register():
         db.session.commit()
         return jsonify(message="user created"), 201
     except Exception as e:
-        print(e)
+        app.logger.error(e)
         return jsonify(message="Registration failed"), 401
 
 
