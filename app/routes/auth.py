@@ -1,3 +1,4 @@
+import os
 from flask import Blueprint, app, jsonify, request
 from flask_jwt_extended import create_access_token
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -29,8 +30,8 @@ def sign_up():
         return jsonify(message="Registration failed"), 401
 
 
-@auth_bp.route("/login", methods=["POST"])
-def login():
+@auth_bp.route("/sign-in", methods=["POST"])
+def sign_in():
     email = request.json.get("email")
     password = request.json.get("password")
 
@@ -38,6 +39,6 @@ def login():
 
     if user is not None and check_password_hash(user.password_hash, password):
         access_token = create_access_token(identity=email)
-        return jsonify(message="Login successful", access_token=access_token)
+        return jsonify(message="Login successful", access_token=access_token, expires_in=os.environ.get("TOKEN_EXPIRATION_TIME"))
     else:
         return jsonify(message="Login failed"), 401
