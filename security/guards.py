@@ -2,6 +2,7 @@ from functools import wraps
 from http import HTTPStatus
 
 from flask import request, g
+from app.services.user import create_user_if_not_exists
 
 from security.auth0_service import auth0_service
 from utils import json_abort
@@ -45,11 +46,28 @@ def get_bearer_token_from_request():
 def protected(function):
     @wraps(function)
     def decorator(*args, **kwargs):
+        from app import app
+
         token = get_bearer_token_from_request()
         validated_token = auth0_service.validate_jwt(token)
 
         g.access_token = validated_token
+        app.logger.info(validated_token)
+        user_id = extract_user_id(validated_token)
+        g.user_id = user_id
+        create_user_if_not_exists(user_id)
 
         return function(*args, **kwargs)
 
     return decorator
+
+
+def extract_user_id(token):
+    # Assuming 'sub' is in the format 'google-oauth2|0000000000000000000'
+    sub_claim = token.get("sub")
+    if sub_claim:
+        parts = sub_claim.split("|")
+        if len(parts) == 2:
+            return parts[1]
+
+    return None
