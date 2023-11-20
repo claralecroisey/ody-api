@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class JobListingStatus(Enum):
+class JobApplicationStatus(Enum):
     saved = "saved"
     applied = "applied"
     rejected = "rejected"

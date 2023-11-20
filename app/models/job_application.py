@@ -4,10 +4,10 @@ from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.dialects.postgresql import UUID
 
 from app import db
-from app.types.enums.job_listing import JobListingStatus
+from app.types.enums.job_application import JobApplicationStatus
 
 
-class JobListing(db.Model):
+class JobApplication(db.Model):
     id: Mapped[UUID] = mapped_column(
         UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
     )
@@ -21,5 +21,5 @@ class JobListing(db.Model):
         UUID, ForeignKey("company.id"), nullable=False
     )
     status = mapped_column(
-        Enum(JobListingStatus), nullable=False, default=JobListingStatus.saved
+        Enum(JobApplicationStatus), nullable=False, default=JobApplicationStatus.saved
     )

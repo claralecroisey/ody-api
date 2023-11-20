@@ -1,4 +1,4 @@
-from .job_listing import jobs_bp
+from .job_application import jobs_bp
 
 
 def register_routes(app):
