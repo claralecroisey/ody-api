@@ -3,10 +3,10 @@ from app.services.job_application import create_job_application
 from security.guards import protected
 
 
-jobs_bp = Blueprint("job_application", __name__)
+jobs_bp = Blueprint("job_applications", __name__, url_prefix="/job-applications")
 
 
-@jobs_bp.route("/job-application", methods=["POST"])
+@jobs_bp.route("", methods=["POST"])
 @protected
 def register_job_application():
     from app import app
