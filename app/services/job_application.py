@@ -9,6 +9,7 @@ def create_job_application(user_id, data):
     if not company:
         company = Company(name=data["company_name"])
         db.session.add(company)
+        db.session.flush()
 
     job_application = JobApplication(
         title=data["title"],
