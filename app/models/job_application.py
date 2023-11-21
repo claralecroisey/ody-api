@@ -22,7 +22,7 @@ class JobApplication(db.Model):
     company_id: Mapped[UUID] = mapped_column(
         UUID, ForeignKey("company.id"), nullable=False
     )
-    company: Mapped["Company"] = relationship()
-    status = mapped_column(
+    company: Mapped["Company"] = relationship("Company")
+    status: Mapped[str] = mapped_column(
         Enum(JobApplicationStatus), nullable=False, default=JobApplicationStatus.saved
     )

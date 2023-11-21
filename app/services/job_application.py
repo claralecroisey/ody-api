@@ -1,5 +1,10 @@
+from typing import List
+
+from sqlalchemy.orm import joinedload
+
 from app import db
 from app.models.models import Company, JobApplication
+from app.types.dtos.job_application import JobApplicationData
 
 
 def create_job_application(user_id, data):
@@ -21,3 +26,23 @@ def create_job_application(user_id, data):
     )
     db.session.add(job_application)
     db.session.commit()
+
+
+def get_user_job_applications(user_id: str) -> List[JobApplicationData]:
+    job_applications_query = JobApplication.query.filter_by(user_id=user_id).options(
+        joinedload(JobApplication.company)
+    )
+    job_applications = [
+        JobApplicationData(
+            id=j.id,
+            title=j.title,
+            description=j.description,
+            company_name=j.company.name,
+            role=j.role,
+            url=j.url,
+            status=j.status,
+        )
+        for j in job_applications_query
+    ]
+
+    return job_applications
