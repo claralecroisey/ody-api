@@ -1,5 +1,5 @@
-from app.models.user import User
 from app import db
+from app.models.user import User
 
 
 def create_user_if_not_exists(user_id: str):

@@ -1,5 +1,6 @@
 from os import environ
-from flask import jsonify, abort
+
+from flask import abort, jsonify
 
 
 def safe_get_env_var(key):

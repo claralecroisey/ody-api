@@ -1,4 +1,7 @@
 {
   "python.analysis.autoImportCompletions": true,
-  "python.languageServer": "Pylance"
+  "python.languageServer": "Pylance",
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": true
+  }
 }

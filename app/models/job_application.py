@@ -1,9 +1,11 @@
 import uuid
+
 from sqlalchemy import Enum, ForeignKey, String
-from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app import db
+from app.models.company import Company
 from app.types.enums.job_application import JobApplicationStatus
 
 
@@ -20,6 +22,7 @@ class JobApplication(db.Model):
     company_id: Mapped[UUID] = mapped_column(
         UUID, ForeignKey("company.id"), nullable=False
     )
+    company: Mapped["Company"] = relationship()
     status = mapped_column(
         Enum(JobApplicationStatus), nullable=False, default=JobApplicationStatus.saved
     )

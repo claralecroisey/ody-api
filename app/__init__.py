@@ -1,13 +1,10 @@
+from dotenv import load_dotenv
 from flask import Flask
-
 from flask_cors import CORS
 
-from app.extensions import db, migrate, basic_auth
+from app.extensions import basic_auth, db, migrate
 from app.routes import register_routes
-
-from dotenv import load_dotenv
 from security.auth0_service import auth0_service
-
 from utils import safe_get_env_var
 
 

@@ -1,7 +1,8 @@
 from flask import Blueprint, jsonify, request
+
+from app import basic_auth
 from app.services.user import create_user_if_not_exists
 from security.guards import extract_user_id
-from app import basic_auth
 
 auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
 

@@ -1,7 +1,7 @@
 from flask import Blueprint, g, jsonify, request
+
 from app.services.job_application import create_job_application
 from security.guards import protected
-
 
 jobs_bp = Blueprint("job_applications", __name__, url_prefix="/job-applications")
 

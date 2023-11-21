@@ -1,7 +1,7 @@
 from functools import wraps
 from http import HTTPStatus
 
-from flask import request, g
+from flask import g, request
 
 from security.auth0_service import auth0_service
 from utils import json_abort

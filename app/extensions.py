@@ -1,7 +1,7 @@
+from flask_basicauth import BasicAuth
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase
-from flask_basicauth import BasicAuth
 
 
 class Base(DeclarativeBase):

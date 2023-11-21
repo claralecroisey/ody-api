@@ -1,5 +1,5 @@
-from .job_application import jobs_bp
 from .auth import auth_bp
+from .job_application import jobs_bp
 
 
 def register_routes(app):
