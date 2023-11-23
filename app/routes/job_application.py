@@ -5,6 +5,7 @@ from flask import Blueprint, g, jsonify, make_response, request
 from app.services.job_application import (
     check_user_owns_job_application,
     create_job_application,
+    delete_job_application,
     get_user_job_applications,
     update_job_application,
 )
@@ -66,6 +67,28 @@ def update_user_job_application(id: UUID):
             200,
         )
     except Exception as e:
-        print(e)
+        app.logger.error(e)
+        return jsonify(message=f"An unexpected error happend {str(e)}"), 400
+
+
+@jobs_bp.route("/<id>", methods=["DELETE"])
+@protected
+def delete_user_job_application(id: UUID):
+    from app import app
+
+    try:
+        user_owns_job_application = check_user_owns_job_application(
+            job_id=id, user_id=g.user_id
+        )
+        if not user_owns_job_application:
+            return jsonify(message="Job application not found"), 404
+
+        delete_job_application(job_id=id)
+
+        return (
+            jsonify(message=f"Successfully deleted job application with id {id}"),
+            200,
+        )
+    except Exception as e:
         app.logger.error(e)
         return jsonify(message=f"An unexpected error happend {str(e)}"), 400

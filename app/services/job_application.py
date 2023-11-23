@@ -70,6 +70,15 @@ def update_job_application(job_id: UUID, data: Dict[str, str]) -> JobApplication
     )
 
 
+def delete_job_application(job_id: UUID) -> None:
+    job_application: JobApplication = JobApplication.query.get(job_id)
+    if job_application is None:
+        return
+
+    db.session.delete(job_application)
+    db.session.commit()
+
+
 def check_user_owns_job_application(job_id: UUID, user_id: str) -> bool:
     job_application = JobApplication.query.get(job_id)
     return job_application is not None and job_application.user_id == user_id
