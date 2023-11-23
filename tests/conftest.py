@@ -2,6 +2,7 @@ import pytest
 
 from app import create_app, db
 from config import TestConfig
+from tests.factories import UserFactory
 
 
 @pytest.fixture
@@ -25,3 +26,8 @@ def test_db(app):
         yield db
         db.session.remove()
         db.drop_all()
+
+
+@pytest.fixture(autouse=True)
+def setup_default_user(test_db):
+    UserFactory.create()

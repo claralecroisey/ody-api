@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Dict, List, Optional
 from uuid import UUID
 
 from sqlalchemy.orm import joinedload
@@ -52,7 +52,9 @@ def get_user_job_applications(user_id: str) -> List[JobApplicationData]:
     return job_applications
 
 
-def update_job_application(job_id: UUID, data: Dict[str, str]) -> JobApplicationData:
+def update_job_application(
+    job_id: UUID, data: Dict[str, str]
+) -> Optional[JobApplicationData]:
     job_application: JobApplication = JobApplication.query.get(job_id)
     if job_application is None:
         return
