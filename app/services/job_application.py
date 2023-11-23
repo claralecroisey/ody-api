@@ -31,8 +31,10 @@ def create_job_application(user_id, data):
 
 
 def get_user_job_applications(user_id: str) -> List[JobApplicationData]:
-    job_applications_query = JobApplication.query.filter_by(user_id=user_id).options(
-        joinedload(JobApplication.company)
+    job_applications_query = (
+        JobApplication.query.filter_by(user_id=user_id)
+        .options(joinedload(JobApplication.company))
+        .all()
     )
     job_applications = [
         JobApplicationData(
