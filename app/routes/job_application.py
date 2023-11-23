@@ -1,8 +1,12 @@
+from uuid import UUID
+
 from flask import Blueprint, g, jsonify, make_response, request
 
 from app.services.job_application import (
+    check_user_owns_job_application,
     create_job_application,
     get_user_job_applications,
+    update_job_application,
 )
 from security.guards import protected
 
@@ -38,5 +42,30 @@ def get_user_applications():
             200,
         )
     except Exception as e:
+        app.logger.error(e)
+        return jsonify(message=f"An unexpected error happend {str(e)}"), 400
+
+
+@jobs_bp.route("/<id>", methods=["PUT"])
+@protected
+def update_user_job_application(id: UUID):
+    from app import app
+
+    try:
+        user_owns_job_application = check_user_owns_job_application(
+            job_id=id, user_id=g.user_id
+        )
+        if not user_owns_job_application:
+            return jsonify(message="Job application not found"), 404
+
+        data = request.get_json()
+        updated_job = update_job_application(job_id=id, data=data)
+
+        return (
+            jsonify(updated_job=updated_job.to_dict() if updated_job else None),
+            200,
+        )
+    except Exception as e:
+        print(e)
         app.logger.error(e)
         return jsonify(message=f"An unexpected error happend {str(e)}"), 400

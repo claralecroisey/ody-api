@@ -1,4 +1,5 @@
-from typing import List
+from typing import Dict, List
+from uuid import UUID
 
 from sqlalchemy.orm import joinedload
 
@@ -46,3 +47,29 @@ def get_user_job_applications(user_id: str) -> List[JobApplicationData]:
     ]
 
     return job_applications
+
+
+def update_job_application(job_id: UUID, data: Dict[str, str]) -> JobApplicationData:
+    job_application: JobApplication = JobApplication.query.get(job_id)
+    if job_application is None:
+        return
+
+    job_application.title = data.get("title")
+    job_application.description = data.get("description")
+
+    db.session.commit()
+
+    return JobApplicationData(
+        id=job_application.id,
+        title=job_application.title,
+        description=job_application.description,
+        company_name=job_application.company.name,
+        role=job_application.role,
+        url=job_application.url,
+        status=job_application.status,
+    )
+
+
+def check_user_owns_job_application(job_id: UUID, user_id: str) -> bool:
+    job_application = JobApplication.query.get(job_id)
+    return job_application is not None and job_application.user_id == user_id
