@@ -1,11 +1,12 @@
-from dotenv import load_dotenv
+import os
+
 from flask import Flask
 from flask_cors import CORS
 
 from app.extensions import basic_auth, db, migrate
 from app.routes import register_routes
+from config import DevConfig, ProdConfig
 from security.auth0_service import auth0_service
-from utils import safe_get_env_var
 
 
 def register_extensions(app):
@@ -15,23 +16,19 @@ def register_extensions(app):
 
 
 def create_app():
-    load_dotenv()
-
-    client_url = safe_get_env_var("CLIENT_URL")
-    db_url = safe_get_env_var("DATABASE_URL")
-    auth0_audience = safe_get_env_var("AUTH0_AUDIENCE")
-    auth0_domain = safe_get_env_var("AUTH0_DOMAIN")
-    basic_auth_username = safe_get_env_var("BASIC_AUTH_USERNAME")
-    basic_auth_password = safe_get_env_var("BASIC_AUTH_PASSWORD")
-
     app = Flask(__name__)
-    CORS(app, origins=[client_url], supports_credentials=True)
-    app.config["SQLALCHEMY_DATABASE_URI"] = db_url
-    app.config["CORS_HEADERS"] = "Content-Type"
 
-    auth0_service.initialize(auth0_domain, auth0_audience)
-    app.config["BASIC_AUTH_USERNAME"] = basic_auth_username
-    app.config["BASIC_AUTH_PASSWORD"] = basic_auth_password
+    env = os.environ.get("FLASK_ENV")
+
+    if env == "production":
+        app.config.from_object(ProdConfig)
+    elif env == "development":
+        app.config.from_object(DevConfig)
+    elif env == "testing":
+        app.config.from_object("config.TestConfig")
+
+    CORS(app, origins=[app.config["CLIENT_URL"]], supports_credentials=True)
+    auth0_service.initialize(app.config["AUTH0_DOMAIN"], app.config["AUTH0_AUDIENCE"])
 
     register_extensions(app)
     register_routes(app)
