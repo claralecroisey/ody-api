@@ -82,17 +82,23 @@ class TestJobApplicationsRoutes:
     def test_create_job_application_with_unknown_company_name_creates_company(
         self, _, __, client, test_db
     ):
+        new_company_name = "new_company_name"
+
+        # Company does not exist yet
+        Company.query.filter_by(name=new_company_name).first()
+        assert Company.query.filter_by(name=new_company_name).first() is None
+
         payload_body = {
             "title": "mocked_title",
             "description": "mocked_description",
-            "company_name": "new_company_name",  # Creating a job application with a new company name
+            "company_name": new_company_name,  # Creating a job application with a new company name
             "role": "mocked_role",
             "url": "mocked_url",
             "status": "applied",
         }
         client.post("/job-applications", json=payload_body)
 
-        created_company = Company.query.filter_by(name="new_company_name").first()
+        created_company = Company.query.filter_by(name=new_company_name).first()
         assert created_company is not None
 
     @patch(

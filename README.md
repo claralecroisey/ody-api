@@ -36,7 +36,7 @@ Then install dependencies:
 pip install -r requirements.txt
 ```
 
-## Run the API
+## Running the API
 
 First, don't forget to run the migrations to create and update necessary tables, via:
 
@@ -53,14 +53,10 @@ flask run
 
 ## Running tests
 
-Make sure you have pytest installed first.
-
-```
-pip install pytest
-```
-
-then simply run `pytest` to run all tests:
+Simply run `pytest` to run all tests:
 
 ```
 pytest
 ```
+
+(or FLASK_ENV=testing pytest depending on how you set up FLASK_ENV)

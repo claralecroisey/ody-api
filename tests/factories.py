@@ -12,8 +12,6 @@ class UserFactory(alchemy.SQLAlchemyModelFactory):
         sqlalchemy_session = db.session
         sqlalchemy_session_persistence = "commit"
 
-    id = "mocked_user_id"
-
 
 class JobApplicationFactory(alchemy.SQLAlchemyModelFactory):
     class Meta:

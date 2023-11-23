@@ -8,28 +8,6 @@ from app.models.models import Company, JobApplication
 from app.types.dtos.job_application import JobApplicationData
 
 
-def create_job_application(user_id, data):
-    # TODO add session management
-    company = Company.query.filter_by(name=data["company_name"]).first()
-
-    if not company:
-        company = Company(name=data["company_name"])
-        db.session.add(company)
-        db.session.flush()
-
-    job_application = JobApplication(
-        title=data["title"],
-        description=data["description"],
-        company_id=company.id,
-        role=data["role"],
-        url=data["url"],
-        user_id=user_id,
-        status=data["status"],
-    )
-    db.session.add(job_application)
-    db.session.commit()
-
-
 def get_user_job_applications(user_id: str) -> List[JobApplicationData]:
     job_applications_query = (
         JobApplication.query.filter_by(user_id=user_id)
@@ -50,6 +28,27 @@ def get_user_job_applications(user_id: str) -> List[JobApplicationData]:
     ]
 
     return job_applications
+
+
+def create_job_application(user_id, data):
+    company = Company.query.filter_by(name=data["company_name"]).first()
+
+    if not company:
+        company = Company(name=data["company_name"])
+        db.session.add(company)
+        db.session.flush()
+
+    job_application = JobApplication(
+        title=data["title"],
+        description=data["description"],
+        company_id=company.id,
+        role=data["role"],
+        url=data["url"],
+        user_id=user_id,
+        status=data["status"],
+    )
+    db.session.add(job_application)
+    db.session.commit()
 
 
 def update_job_application(

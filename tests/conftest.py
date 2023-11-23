@@ -30,4 +30,4 @@ def test_db(app):
 
 @pytest.fixture(autouse=True)
 def setup_default_user(test_db):
-    UserFactory.create()
+    UserFactory.create(id="mocked_user_id")

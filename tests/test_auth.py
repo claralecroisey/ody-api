@@ -4,7 +4,7 @@ from app.models.user import User
 
 
 class TestAuthRoutes:
-    def test_register_auth_without_authentication_returns_401(self, client):
+    def test_call_auth_endpoint_without_authentication_returns_401(self, client):
         payload_body = {"user_id": "mocked_user_id"}
         response = client.post("/auth", json=payload_body)
 
