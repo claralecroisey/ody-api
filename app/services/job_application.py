@@ -24,6 +24,7 @@ def create_job_application(user_id, data):
         role=data["role"],
         url=data["url"],
         user_id=user_id,
+        status=data["status"],
     )
     db.session.add(job_application)
     db.session.commit()
@@ -56,6 +57,7 @@ def update_job_application(job_id: UUID, data: Dict[str, str]) -> JobApplication
 
     job_application.title = data.get("title")
     job_application.description = data.get("description")
+    job_application.status = data.get("status")
 
     db.session.commit()
 
