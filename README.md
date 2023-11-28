@@ -45,10 +45,22 @@ flask db init
 flask db upgrade
 ```
 
-To start the app, simple run:
+Before starting the app, set the ENV variable manually:
+
+```
+export FLASK_ENV=development
+```
+
+Then, simply run:
 
 ```
 flask run
+```
+
+If you'd like to activate the debugger in dev mode (recommended while developping locally):
+
+```
+flask run --debug
 ```
 
 ## Running tests

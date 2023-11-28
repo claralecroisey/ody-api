@@ -24,8 +24,6 @@ def create_app():
         app.config.from_object(ProdConfig)
     elif env == "development":
         app.config.from_object(DevConfig)
-    elif env == "testing":
-        app.config.from_object("config.TestConfig")
 
     CORS(app, origins=[app.config["CLIENT_URL"]], supports_credentials=True)
     auth0_service.initialize(app.config["AUTH0_DOMAIN"], app.config["AUTH0_AUDIENCE"])
