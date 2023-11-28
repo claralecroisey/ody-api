@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from flask import Blueprint, g, jsonify, make_response, request
+from flask import Blueprint, current_app, g, jsonify, make_response, request
 
 from app.services.job_application import (
     check_user_owns_job_application,
@@ -17,8 +17,6 @@ jobs_bp = Blueprint("job_applications", __name__, url_prefix="/job-applications"
 @jobs_bp.route("", methods=["GET"])
 @protected
 def get_user_applications():
-    from app import app
-
     try:
         user_applications = get_user_job_applications(g.user_id)
 
@@ -27,15 +25,13 @@ def get_user_applications():
             200,
         )
     except Exception as e:
-        app.logger.error(e)
+        current_app.logger.error(e)
         return jsonify(message=f"An unexpected error happend {str(e)}"), 400
 
 
 @jobs_bp.route("", methods=["POST"])
 @protected
 def register_job_application():
-    from app import app
-
     try:
         data = request.get_json()
         user_id = g.user_id
@@ -43,15 +39,13 @@ def register_job_application():
 
         return jsonify(message="Successfully created"), 201
     except Exception as e:
-        app.logger.error(e)
+        current_app.logger.error(e)
         return jsonify(message=f"An unexpected error happend {str(e)}"), 400
 
 
 @jobs_bp.route("/<id>", methods=["PUT"])
 @protected
 def update_user_job_application(id: UUID):
-    from app import app
-
     try:
         user_owns_job_application = check_user_owns_job_application(
             job_id=id, user_id=g.user_id
@@ -67,15 +61,13 @@ def update_user_job_application(id: UUID):
             200,
         )
     except Exception as e:
-        app.logger.error(e)
+        current_app.logger.error(e)
         return jsonify(message=f"An unexpected error happend {str(e)}"), 400
 
 
 @jobs_bp.route("/<id>", methods=["DELETE"])
 @protected
 def delete_user_job_application(id: UUID):
-    from app import app
-
     try:
         user_owns_job_application = check_user_owns_job_application(
             job_id=id, user_id=g.user_id
@@ -90,5 +82,5 @@ def delete_user_job_application(id: UUID):
             200,
         )
     except Exception as e:
-        app.logger.error(e)
+        current_app.logger.error(e)
         return jsonify(message=f"An unexpected error happend {str(e)}"), 400
